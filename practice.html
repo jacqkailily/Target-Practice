@@ -1,0 +1,149 @@
+<html>
+<head>
+    <title>Target Practice</title>
+    <script type="text/javascript" src="js/phaser.min.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<script type="text/javascript">
+
+var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+
+function preload() {
+
+    game.load.image('backgroung', '');
+    game.load.image('platforms', '');
+    game.load.image('target', '');
+    game.load.image('ball', '');
+
+}
+
+var background;
+var ball;
+var target;
+var platforms;
+var score = 40;
+var scoreText;
+var level = 1;
+var levelText;
+var gravity;
+var gravityText;
+
+function create() {
+
+
+    game.physics.startSystem(Phaser.Physics.ARCADE);
+
+    game.add.sprite(0, 0, 'background');
+
+    platforms = game.add.group();
+
+    platforms.enableBody = true;
+
+
+    ball = game.add.group();
+
+    ball.enableBody = true;
+
+
+    var ball = ball.create( 100 * Math.random() + 400, 300,  'star');
+
+    ball.body.gravity.y = 300 * Math.random();
+
+
+    ball.body.bounce.y = 1;
+
+
+    //  The score
+    scoreText = game.add.text(20, 20, 'Score: 0', { fontSize: '32px', fill: '#000' });
+    levelText = game.add.text(20, 16, 'Level: 1', { fontSize: '32px', fill: '#000' })
+    
+
+    var gravity = ball.body.gravity.y 
+
+    ball.body.collideWorldBounds = true;
+
+    gravityText = game.add.text(20, 24, 'Gravity: ' + gravity , { fontSize: '32px', fill: '#000' })
+    
+    //  Our controls.
+    cursors = game.input.keyboard.createCursorKeys();
+
+}
+
+function update() {
+
+    //  Collide the player and the stars with the platforms
+    game.physics.arcade.collide(target, platforms);
+    game.physics.arcade.collide(ball, platforms);
+
+    //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
+    game.physics.arcade.overlap(target, ball, collectStar, null, this);
+
+    //  Reset the players velocity (movement)
+    player.body.velocity.x = 0;
+
+    if (cursors.left.push)
+    {
+        
+        //  Move to the left
+        ball.body.position.x = 
+    }
+    else if (cursors.down.isDown)
+    {
+        //  Move to the right
+        ball.body.velocity.y = 150;
+    }
+    else if (cursors.up.isDown)
+    {
+        ball.body.velocity.y = -150;  
+    }
+}
+
+function collectBall (ground, ball) {
+    
+    target.kill();
+
+    score -= 1;
+    scoreText.text = 'Score: ' + score;
+
+    function create() {
+
+    }
+}
+
+function collectTarget (ball , target) {
+    
+    // Removes the star from the screen
+    target.kill();
+
+    level += 1;
+    levelText.text = 'Level: ' + level;
+
+    function create() {
+    
+    target = game.add.group();
+
+    target.enableBody = true;
+
+    var target = target.create( 100 * Math.random() + 400, 300,  'target');
+
+    target.body.gravity.y = 300 * Math.random();
+
+    target.body.bounce.y = 1;
+
+    var gravity = target.body.gravity.y
+    target.body.collideWorldBounds = true;
+
+    gravityText.text = 'Gravity: ' + gravity;
+
+}
+
+}
+
+</body>
+</html>

@@ -28,8 +28,12 @@ var platforms;
 var cursors;
 
 var stars;
-var score = 0;
+var score = 40;
 var scoreText;
+var level = 1;
+var levelText;
+var gravity;
+var gravityText;
 
 function create() {
 
@@ -98,14 +102,17 @@ function create() {
     var star = stars.create(150 * Math.random() + 400, 300, 'star');
 
     //  Let gravity do its thing
-    star.body.gravity.y = 125;
+    var gravity = star.body.gravity.y = 125;
 
     //  This just gives each star a slightly random bounce value
     star.body.bounce.y = 1.105//+ Math.random() * 0.2;
 
 
     //  The score
-    scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+    scoreText = game.add.text(20, 52, 'Score: 0', { fontSize: '32px', fill: '#000' });
+    levelText = game.add.text(20, 16, 'Level: 1', { fontSize: '32px', fill: '#000' })
+    gravityText = game.add.text(20, 86, 'Gravity: ' + gravity , { fontSize: '32px', fill: '#000' })
+    
 
     //  Our controls.
     cursors = game.input.keyboard.createCursorKeys();
@@ -150,19 +157,47 @@ function update() {
     if (cursors.up.isDown && player.body.touching.down)
     {
         player.body.velocity.y = -350;
+
+        score -= 1;
+        scoreText.text = 'Score: ' + score;
     }
 
 }
 
-function collectStar (player, star) {
+function collectPlayer (ground, player) {
+    
+    player.kill();
+
+    score -= 1;
+    scoreText.text = 'Score: ' + score;
+
+}
+
+function collectStar (player , star) {
     
     // Removes the star from the screen
     star.kill();
 
-    //  Add and update the score
-    score += 10;
-    scoreText.text = 'Score: ' + score;
+    level += 1;
+    levelText.text = 'Level: ' + level;
 
+}
+
+if (star.kill()) {
+    function create() {
+    stars = game.add.group();
+  
+    stars.enableBody = true;
+
+    var star = stars.create(150 * Math.random() + 400, 300, 'star');
+
+    star.body.gravity.y = 125;
+
+    star.body.bounce.y = 1.105
+
+    var gravity = star.body.gravity.y
+    star.body.collideWorldBounds = true;
+    }
 }
 
 </script>
